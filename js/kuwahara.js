@@ -14,6 +14,21 @@
          * You need to clearly understand the following code to make
          * appropriate changes
          */
+        var subregionSize, halfSubregionSize;
+        switch(size){
+            case 5:
+                subregionSize = 3;
+                halfSubregionSize = 1;
+                break;
+            case 9:
+                subregionSize = 5;
+                halfSubregionSize = 2;
+                break;
+            case 13:
+                subregionSize = 7;
+                halfSubregionSize = 3;
+                break;
+        }
 
         /*
          * An internal function to find the regional stat centred at (x, y)
@@ -22,8 +37,8 @@
             // Find the mean colour and brightness
             var meanR = 0, meanG = 0, meanB = 0;
             var meanValue = 0;
-            for (var j = -1; j <= 1; j++) {
-                for (var i = -1; i <= 1; i++) {
+            for (var j = -1 * halfSubregionSize; j <= halfSubregionSize; j++) {
+                for (var i = -1 * halfSubregionSize; i <= halfSubregionSize; i++) {
                     var pixel = imageproc.getPixel(inputData, x + i, y + j);
 
                     // For the mean colour
@@ -35,22 +50,22 @@
                     meanValue += (pixel.r + pixel.g + pixel.b) / 3;
                 }
             }
-            meanR /= 9;
-            meanG /= 9;
-            meanB /= 9;
-            meanValue /= 9;
+            meanR /= (subregionSize * subregionSize);
+            meanG /= (subregionSize * subregionSize);
+            meanB /= (subregionSize * subregionSize);
+            meanValue /= (subregionSize * subregionSize);
 
             // Find the variance
             var variance = 0;
-            for (var j = -1; j <= 1; j++) {
-                for (var i = -1; i <= 1; i++) {
+            for (var j = -1 * halfSubregionSize; j <= halfSubregionSize; j++) {
+                for (var i = -1 * halfSubregionSize; i <= halfSubregionSize; i++) {
                     var pixel = imageproc.getPixel(inputData, x + i, y + j);
                     var value = (pixel.r + pixel.g + pixel.b) / 3;
 
                     variance += Math.pow(value - meanValue, 2);
                 }
             }
-            variance /= 9;
+            variance /= (subregionSize * subregionSize);
 
             // Return the mean and variance as an object
             return {
@@ -62,10 +77,10 @@
         for (var y = 0; y < inputData.height; y++) {
             for (var x = 0; x < inputData.width; x++) {
                 // Find the statistics of the four sub-regions
-                var regionA = regionStat(x - 1, y - 1, inputData);
-                var regionB = regionStat(x + 1, y - 1, inputData);
-                var regionC = regionStat(x - 1, y + 1, inputData);
-                var regionD = regionStat(x + 1, y + 1, inputData);
+                var regionA = regionStat(x - halfSubregionSize, y - halfSubregionSize, inputData);
+                var regionB = regionStat(x + halfSubregionSize, y - halfSubregionSize, inputData);
+                var regionC = regionStat(x - halfSubregionSize, y + halfSubregionSize, inputData);
+                var regionD = regionStat(x + halfSubregionSize, y + halfSubregionSize, inputData);
 
                 // Get the minimum variance value
                 var minV = Math.min(regionA.variance, regionB.variance,

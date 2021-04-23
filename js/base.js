@@ -36,7 +36,7 @@
 
         // maximum 
         // for (var i = 0; i < inputData.data.length; i += 4) {
-        //     // Find the grayscale value using simple averaging
+        //     // Find the grayscale value using maximum
         //     var intensity = Math.max(inputData.data[i],inputData.data[i+1],inputData.data[i+2]);
         //     // Change the RGB components to the resulting value
 
@@ -47,7 +47,7 @@
 
         // luminance 
         // for (var i = 0; i < inputData.data.length; i += 4) {
-        //     // Find the grayscale value using simple averaging
+        //     // Find the grayscale value using luminance
         //     var intensity = 0.2126*inputData.data[i]+ 0.7152*inputData.data[i+1]+0.0722*inputData.data[i+2];
         //     // Change the RGB components to the resulting value
 
@@ -224,7 +224,6 @@
             if (histogram[max] > 0) break;
         }
 
-        console.log({"min": min, "max": max});
         return {"min": min, "max": max};
     }
 

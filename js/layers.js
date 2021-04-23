@@ -199,7 +199,24 @@
                  * TODO: You need to show the shade layer (shadeLayer) for
                  * the non-edge pixels (transparent)
                  */
-
+                 for (var i = 0; i < outlineLayer.data.length; i+=4) {
+                    if ($("#sobel-flip").prop("checked")){
+                        if (outlineLayer.data[i] == 255 && outlineLayer.data[i + 1] == 255 && outlineLayer.data[i + 2] == 255) { //... the current pixel is a non-edge pixel ...
+                            // ... replace the pixel by the shade layer pixel ...
+                            outlineLayer.data[i] = baseLayer.data[i];
+                            outlineLayer.data[i+1] = baseLayer.data[i+1];
+                            outlineLayer.data[i+2] = baseLayer.data[i+2];
+                        }
+                    }
+                    else{
+                        if (outlineLayer.data[i] == 0 && outlineLayer.data[i + 1] == 0 && outlineLayer.data[i + 2] == 0) { //... the current pixel is a non-edge pixel ...
+                            // ... replace the pixel by the shade layer pixel ...
+                            outlineLayer.data[i] = baseLayer.data[i];
+                            outlineLayer.data[i+1] = baseLayer.data[i+1];
+                            outlineLayer.data[i+2] = baseLayer.data[i+2];
+                        }
+                    }
+                }
             }
         }
 
